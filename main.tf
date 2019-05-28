@@ -61,7 +61,7 @@ resource "aws_s3_bucket" "origin" {
   cors_rule {
     allowed_headers = "${var.cors_allowed_headers}"
     allowed_methods = "${var.cors_allowed_methods}"
-    allowed_origins = "${sort(distinct(compact(concat(var.cors_allowed_origins, var.aliases))))}"
+    allowed_origins = ["${sort(distinct(compact(concat(var.cors_allowed_origins, list(var.aliases)))))}"]
     expose_headers  = "${var.cors_expose_headers}"
     max_age_seconds = "${var.cors_max_age_seconds}"
   }
@@ -174,7 +174,7 @@ resource "aws_cloudfront_distribution" "default" {
 module "dns" {
   source           = "git::https://github.com/cloudposse/terraform-aws-route53-alias.git?ref=tags/0.2.7"
   enabled          = "${var.enabled == "true" && (length(var.parent_zone_id) > 0 || length(var.parent_zone_name) > 0) ? "true" : "false"}"
-  aliases          = "${var.aliases}"
+  aliases          = "${list(var.aliases)}"
   parent_zone_id   = "${var.parent_zone_id}"
   parent_zone_name = "${var.parent_zone_name}"
   target_dns_name  = "${aws_cloudfront_distribution.default.domain_name}"

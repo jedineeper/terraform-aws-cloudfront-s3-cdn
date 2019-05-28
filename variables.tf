@@ -47,9 +47,9 @@ variable "minimum_protocol_version" {
 }
 
 variable "aliases" {
-  type        = "list"
+  type        = "string"
   description = "List of FQDN's - Used to set the Alternate Domain Names (CNAMEs) setting on Cloudfront"
-  default     = []
+  default     = ""
 }
 
 variable "use_regional_s3_endpoint" {
